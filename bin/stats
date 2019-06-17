@@ -4,9 +4,15 @@ $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
 require 'stats'
 require 'csv'
 
+if ARGV.size < 1
+  $stderr.puts "Usage: stats <path-to-repo>"
+  $stderr.puts
+  exit(1)
+end
+
 puts CSV.generate_line ["Merge date", "Time to build (secs)", "tag"]
 
 
-Stats.for('/Users/davidheath/gds/pay-connector').each do |merge| 
+Stats.for(ARGV.fetch(0)).each do |merge| 
   puts CSV.generate_line [merge[:merge_date].new_offset(0).to_s, merge[:time_to_build_in_seconds], merge[:first_tag]]
 end 
